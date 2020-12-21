@@ -21,15 +21,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val workManager = WorkManager.getInstance()
-        val constraints =
-            androidx.work.Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-        val task = OneTimeWorkRequest.Builder(DownloadFileWorkManager::class.java)
-            .setConstraints(constraints).build()
-        workManager.enqueue(task)
+
 
         button_download.setOnClickListener {
+            val workManager = WorkManager.getInstance()
+            val constraints =
+                    androidx.work.Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build()
+            val task = OneTimeWorkRequest.Builder(DownloadFileWorkManager::class.java)
+                    .setConstraints(constraints).build()
+            workManager.enqueue(task)
+
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
@@ -57,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         request.allowScanningByMediaScanner()
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
-            Environment.DIRECTORY_DOWNLOADS,
-            "" + System.currentTimeMillis()
+                Environment.DIRECTORY_DOWNLOADS,
+                "" + System.currentTimeMillis()
         )
 
         var manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -67,9 +70,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         when (requestCode) {
             PERMISSION_STORAGE_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
